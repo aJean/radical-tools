@@ -1,0 +1,28 @@
+## bxltools
+
+#### 背景
+- bxl 扩展格式资源处理
+- 生成 encode key
+
+#### 安装
+npm i -g http://gitlab.baidu.com/xr/bxltools/repository/archive.tar\?ref\=master
+
+#### 使用
+- bxltools -h
+- bxltools encode -h
+- bxltools key -h
+
+#### 例子：加密并限制域名
+- bxltools encode -i /a/b/imgs/ -d baidu.com,xr.baidu.com
+
+#### 例子: 切割图片
+- bxltools flatten ~/project/texPath 预览图
+- bxltools incise ~/project/texPath -l 0 六面体图
+- bxltools incise ~/project/texPath -l 1 高清 1级 4 瓦片分割
+- bxltools incise ~/project/texPath -l 2 高清 2级 16 瓦片分割
+
+#### release 1.0.1
+- 增加水印功能
+
+#### release 1.0.2
+- 增加切分功能

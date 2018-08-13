@@ -1,0 +1,22 @@
+{
+    // "compileOnSave": true,
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": false,
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "target": "es5",
+        "noUnusedLocals": true,
+        "outDir": "./dist"
+    },
+
+    "include": [
+        "index.ts",
+        "lib/**/*"
+    ],
+
+    "exclude": [
+        "node_modules"
+    ]
+}
