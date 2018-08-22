@@ -1,7 +1,7 @@
 import fs = require('fs');
 import path = require('path');
-import images = require("images");
 import encrypt from './encrypt';
+import {createCanvas, loadImage} from 'canvas';
 import log from './log';
 import Key from './key';
 
@@ -27,29 +27,32 @@ function getPath(url: string) {
  * 图片加水印并生成 base64
  */
 function watermark(url: string) {
-    return new Promise((resolve, reject) => {
-        try {
-            const img = images(url);
-            const size = img.size();
-            const data:any = img.draw(images(__dirname + '/xr.png'), size.width / 2, 20).encode('jpg');
-            const str = 'data:image/jpg;base64,' + data.toString('base64');
+    return loadImage(url).then(function (img) {
+        const width = img.width;
+        const height = img.height;
+        const canvas = createCanvas(width, height);
+        const ctx = canvas.getContext('2d');
 
-            resolve(encrypt.dataEncode(str, Key.spliter));
-        } catch (err) {
-            reject(err);
-        }
+        ctx.drawImage(img, 0, 0, width, height);
+
+        ctx.font = '20px Georgia';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.fillText('Hello Radical', width / 2, height / 2);
+
+        return encrypt.dataEncode(canvas.toDataURL('image/jpeg', 1), Key.spliter);
     });
 }
 
 /**
- * 加密 6 张全景图
+ * 加密 cube map
  */
 function encodeFile(sourcePath: string, outPath: string, domain: string) {
     return Promise.all(Key.suffixs.map(name => watermark(sourcePath + name))).then(ret => {
         // source
-        fs.writeFileSync(outPath + 'images.bxl', ret.join(''));
+        fs.writeFileSync(outPath + 'cube.r', ret.join(''));
         // pem
-        fs.writeFileSync(outPath + 'images.pem', encrypt.keyEncode(domain));
+        fs.writeFileSync(outPath + 'cret.txt', encrypt.keyEncode(domain));
     }).catch(e => log.errorLog(e));
 }
 
@@ -66,7 +69,7 @@ export default {
     },
 
     /**
-     * 只生成 pem 证书
+     * generate pem only
      * @param {string} domain 产品线域名
      */
     dopem(domain: string) {
@@ -75,7 +78,7 @@ export default {
     },
 
     /**
-     * 从证书中获取 key
+     * find key from pem
      * @param {string} sourcePath 
      */
     findKey(sourcePath: string) {
@@ -83,7 +86,7 @@ export default {
             const secretKey = data.replace(/-*[A-Z\s]*-\n?/g, '');
             const ret = encrypt.keyDecode(secretKey);
 
-            log.infoLog('真实key: ' + ret.key + '\nEOF: ' + ret.eof);
+            log.infoLog(['真实key: ' + ret.key, 'EOF: ' + ret.eof]);
         });
     }
 }

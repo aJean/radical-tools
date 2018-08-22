@@ -1,4 +1,5 @@
 import * as Canvas from 'canvas';
+import Key from './key';
 import fs = require('fs');
 import mkdirp = require('mkdirp');
 
@@ -7,8 +8,6 @@ import mkdirp = require('mkdirp');
  * @TODO: cluster 多进程改造, remode 异步化改造
  */
 
-const keys = ['r', 'l', 'u', 'd', 'f', 'b'];
-const pkeys = ['l', 'f', 'r', 'b', 'u', 'd'];
 const noop = function() {};
 
 /**
@@ -114,7 +113,7 @@ export default {
         const canvas = new Canvas(256, 1536);
         const ctx = canvas.getContext('2d');
 
-        pkeys.forEach((key, i) => {
+        Key.porder.forEach((key, i) => {
             const buffer = fs.readFileSync(`${path}/${key}.jpg`);
             const img = new Canvas.Image();
             img.src = buffer;
@@ -136,7 +135,7 @@ export default {
             return;
         }
 
-        keys.forEach(key => remodeImg(path, key, opts, level));
+        Key.order.forEach(key => remodeImg(path, key, opts, level));
     },
 
     /**

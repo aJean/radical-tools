@@ -12,8 +12,11 @@ exports.default = {
         console.log(colors.red(symbol));
     },
     infoLog: function (msg) {
+        if (!msg.pop) {
+            msg = [msg];
+        }
         console.info(colors.green(symbol));
-        console.info(colors.magenta(msg));
+        msg.forEach(function (s) { return console.info('    ' + colors.magenta(s)); });
         console.info(colors.green(symbol));
     }
 };

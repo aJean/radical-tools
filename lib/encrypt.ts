@@ -17,7 +17,8 @@ export default {
     },
 
     keyDecode(data: string) {
-        const list = data.split('~#~');
+        const list = data.split(Key.spliter);
+        console.log(list)
         const decipher1 = crypto.createDecipher('aes-256-cbc', Key.secret);
         const decipher2 = crypto.createDecipher('aes-256-cbc', Key.secret);
 
@@ -30,12 +31,12 @@ export default {
     keyEncode(domain: string) {
         const cipher1 = crypto.createCipher('aes-256-cbc', Key.secret);
         const cipher2 = crypto.createCipher('aes-256-cbc', Key.secret);
-        const secretKey = cipher1.update(Key.code, 'utf8', 'hex') + cipher1.final('hex');
+        const secretCode = cipher1.update(Key.code, 'utf8', 'hex') + cipher1.final('hex');
         const EOF = Key.len + '*' + (domain || '');
         const secretEOF = cipher2.update(EOF, 'utf8', 'hex') + cipher2.final('hex');
 
         return ('-----BEGIN PRIVATE KEY-----\n'
-            + secretKey + '~#~' + secretEOF
+            + secretCode + Key.spliter + secretEOF
             + '\n-----END PRIVATE KEY-----');
     }
 }

@@ -1,20 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Canvas = require("canvas");
+var key_1 = require("./key");
 var fs = require("fs");
 var mkdirp = require("mkdirp");
 /**
  * @file 切割文件
  * @TODO: cluster 多进程改造, remode 异步化改造
  */
-var keys = ['r', 'l', 'u', 'd', 'f', 'b'];
-var pkeys = ['l', 'f', 'r', 'b', 'u', 'd'];
 var noop = function () { };
+/**
+ * 存储文件 (async)
+ * @param {Image} img 瓦片图
+ * @param {string} name 图片名
+ */
 function saveImg(img, name) {
     var base64 = img.replace(/^data:image\/\w+;base64,/, '');
     var buffer = new Buffer(base64, 'base64');
     fs.writeFile(name, buffer, noop);
 }
+/**
+ * 瓦片化 (async)
+ * @param {Image} img 当前位面图
+ * @param {number} rect 瓦片尺寸
+ * @param {number} x 起始 x 位置
+ * @param {number} y 起始 y 位置
+ * @param {number} width 裁剪尺寸
+ * @param {number} quality 图片质量
+ * @param {string} name 图片名
+ */
 function drawImg(img, rect, x, y, width, quality, name) {
     var canvas = new Canvas(rect, rect);
     var ctx = canvas.getContext('2d');
@@ -88,7 +102,7 @@ exports.default = {
     flatten: function (path) {
         var canvas = new Canvas(256, 1536);
         var ctx = canvas.getContext('2d');
-        pkeys.forEach(function (key, i) {
+        key_1.default.porder.forEach(function (key, i) {
             var buffer = fs.readFileSync(path + "/" + key + ".jpg");
             var img = new Canvas.Image();
             img.src = buffer;
@@ -107,7 +121,7 @@ exports.default = {
         if (!fs.existsSync(path)) {
             return;
         }
-        keys.forEach(function (key) { return remodeImg(path, key, opts, level); });
+        key_1.default.order.forEach(function (key) { return remodeImg(path, key, opts, level); });
     },
     /**
      * 全部级别切割, 可能需要时间较长

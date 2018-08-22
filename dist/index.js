@@ -3,12 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var env = require("commander");
 var pack_1 = require("./lib/pack");
 var incise_1 = require("./lib/incise");
+var log_1 = require("./lib/log");
 /**
  * @file bxl 标准化工具
  */
 var json = require("../package.json");
-env.version(json.version)
-    .command('encode [path]').description('加密资源')
+env.version(json.version);
+env.command('encode [path]').description('加密资源')
     .option('-i, --input [path]', '目标资源路径')
     .option('-o, --output [path]', '输出资源路径')
     .option('-d, --domain [name]', '产品线域名')
@@ -26,3 +27,6 @@ env.command('inciseall [path]').description('按项目切割文件')
 env.command('flatten [path]').description('拼接预览图')
     .action(function (path, opts) { return incise_1.default.flatten(path); });
 env.parse(process.argv);
+if (!process.argv.slice(2).length) {
+    log_1.default.infoLog(['hello stranger, radical is a webxr solution base on webgl', 'you can find the project in: https://github.com/aJean/radical']);
+}

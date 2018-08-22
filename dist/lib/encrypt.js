@@ -15,7 +15,8 @@ exports.default = {
         return text + body + split;
     },
     keyDecode: function (data) {
-        var list = data.split('~#~');
+        var list = data.split(key_1.default.spliter);
+        console.log(list);
         var decipher1 = crypto.createDecipher('aes-256-cbc', key_1.default.secret);
         var decipher2 = crypto.createDecipher('aes-256-cbc', key_1.default.secret);
         return {
@@ -26,11 +27,11 @@ exports.default = {
     keyEncode: function (domain) {
         var cipher1 = crypto.createCipher('aes-256-cbc', key_1.default.secret);
         var cipher2 = crypto.createCipher('aes-256-cbc', key_1.default.secret);
-        var secretKey = cipher1.update(key_1.default.code, 'utf8', 'hex') + cipher1.final('hex');
+        var secretCode = cipher1.update(key_1.default.code, 'utf8', 'hex') + cipher1.final('hex');
         var EOF = key_1.default.len + '*' + (domain || '');
         var secretEOF = cipher2.update(EOF, 'utf8', 'hex') + cipher2.final('hex');
         return ('-----BEGIN PRIVATE KEY-----\n'
-            + secretKey + '~#~' + secretEOF
+            + secretCode + key_1.default.spliter + secretEOF
             + '\n-----END PRIVATE KEY-----');
     }
 };

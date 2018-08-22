@@ -14,8 +14,12 @@ export default {
     },
 
     infoLog(msg: any) {
+        if (!msg.pop) {
+            msg = [msg];
+        }
+
         console.info(colors.green(symbol));
-        console.info(colors.magenta(msg));
+        msg.forEach(s => console.info('    ' + colors.magenta(s)));
         console.info(colors.green(symbol));
     }
 }
