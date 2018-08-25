@@ -19,10 +19,14 @@
   "author": "aJean",
   "license": "MIT",
   "dependencies": {
+    "@types/download": "^6.2.2",
     "@types/images": "^2.2.2",
+    "@types/inquirer": "0.0.43",
     "canvas": "^2.0.0-alpha.13",
     "colors": "^1.3.0",
     "commander": "^2.16.0",
+    "download": "^7.1.0",
+    "inquirer": "^6.2.0",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {

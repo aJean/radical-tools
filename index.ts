@@ -1,10 +1,12 @@
 import env = require('commander');
 import Pack from './lib/pack';
 import Incise from './lib/incise';
+import * as inquirer from 'inquirer';
+import {create} from './lib/project';
 import Log from './lib/log';
 
 /**
- * @file bxl 标准化工具
+ * @file radical 标准化工具
  */
 
 const json = require("../package.json");
@@ -32,6 +34,27 @@ env.command('inciseall [path]').description('按项目切割文件')
 
 env.command('flatten [path]').description('拼接预览图')
     .action((path , opts)=> Incise.flatten(path));
+
+env.command('init').description('生成工程')
+    .action(() => {
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: '请输入项目名称'
+            },
+            {
+                type: 'input',
+                name: 'author',
+                message: '请输入作者名称'
+            },
+            {
+                type: 'input',
+                name: 'description',
+                message: '请输入项目描述'
+            }
+        ]).then(answers => create(answers));
+    });
 
 env.parse(process.argv);
 
