@@ -8,6 +8,9 @@
 #### 安装
 npm i -g https://github.com/aJean/radical-tools.git
 
+#### 生成项目
+- rtools init
+
 #### 使用
 - rtools -h
 - rtools encode -h
